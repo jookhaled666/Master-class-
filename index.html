@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mayor | Content Creator Masterclass</title>
+    
+    <!-- Fonts: Inter & Space Grotesk for that "Agency" look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mayor-accent': '#E69F70', /* NEW LUXURY COLOR */
+                        'glass-black': 'rgba(20, 20, 20, 0.6)',
+                        'glass-border': 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E69F70;
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 3D Tilt Effect Base */
+        .tilt-card {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+        
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Selection Color */
+        ::selection {
+            background: #E69F70;
+            color: #000;
+        }
+
+        /* Accordion Animation */
+        .accordion-content {
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-item.active .accordion-content {
+            opacity: 1;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-item.active {
+            border-color: rgba(230, 159, 112, 0.5); /* mayor-accent with opacity */
+            background: rgba(230, 159, 112, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-black text-white overflow-x-hidden selection:bg-mayor-accent selection:text-black">
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-mayor-accent z-50 w-0 transition-all duration-100 ease-out shadow-[0_0_10px_#E69F70]"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 bg-black/50 backdrop-blur-md border-b border-white/5 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="w-8 h-8 bg-mayor-accent rounded-lg flex items-center justify-center font-bold text-black text-xl font-display">M</div>
+                <div class="text-xl font-bold tracking-tighter font-display">THE MAYOR<span class="text-mayor-accent">.</span></div>
+            </div>
+            <button onclick="scrollToForm()" class="hidden md:block px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all text-sm font-medium">
+                Secure Your Seat
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-12 px-6 max-w-7xl mx-auto flex flex-col items-center text-center">
+        <!-- Background Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-mayor-accent/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="space-y-6 max-w-4xl z-10 reveal active">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-white/10 text-sm text-zinc-300 animate-fade-in-up">
+                <span class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></span>
+                Applications Open for Cohort 01
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] font-display">
+                Content Creator <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-400 to-zinc-600">Masterclass</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+                A step-by-step system to become a paid content creator in the GCC market.
+                <br class="hidden md:block" />
+                <span class="text-white font-medium">Content → Audience → Revenue.</span>
+            </p>
+
+            <!-- Video Placeholder -->
+            <div class="mt-8 relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl group cursor-pointer max-w-5xl mx-auto glass-panel tilt-card-trigger">
+                <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 z-20">
+                    <div class="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 transition-all hover:bg-mayor-accent hover:border-mayor-accent group-hover:text-black">
+                        <i data-lucide="play" class="w-8 h-8 text-white fill-white ml-1 group-hover:text-black group-hover:fill-black"></i>
+                    </div>
+                </div>
+                <div class="absolute bottom-6 left-6 text-left z-20 pointer-events-none">
+                    <p class="text-sm font-bold uppercase tracking-widest text-zinc-500">Video Preview</p>
+                    <p class="text-lg font-medium">How to turn views into business in Dubai</p>
+                </div>
+                <div class="absolute top-4 right-4 bg-red-500/20 border border-red-500 text-red-200 text-xs px-2 py-1 rounded z-20">
+                    ADMIN: UPLOAD TRAILER HERE
+                </div>
+                <!-- Placeholder Image -->
+                <img src="https://images.unsplash.com/photo-1533750516457-a7f992034fec?q=80&w=2000&auto=format&fit=crop" alt="Masterclass Teaser" class="w-full h-full object-cover opacity-40 hover:opacity-50 transition-opacity">
+            </div>
+        </div>
+    </header>
+
+    <!-- Mini Offer Box 1 -->
+    <div class="my-12 mx-auto max-w-sm glass-panel rounded-xl p-4 flex items-center justify-between shadow-[0_0_20px_rgba(230,159,112,0.15)] transform hover:scale-105 transition-all cursor-pointer reveal" onclick="scrollToForm()">
+        <div class="flex flex-col">
+            <span class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Limited Time Offer</span>
+            <div class="flex items-baseline gap-2">
+               <span class="text-sm line-through text-zinc-500">AED 5,000</span>
+               <span class="text-lg font-bold text-mayor-accent">AED 3,000</span>
+            </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+            <div class="flex items-center gap-1 text-mayor-accent font-mono text-xs font-bold bg-mayor-accent/10 px-2 py-1 rounded border border-mayor-accent/20">
+                <i data-lucide="clock" class="w-3 h-3"></i>
+                <span class="countdown-timer">23:59:59</span>
+            </div>
+            <span class="text-[10px] text-white bg-red-500/80 px-2 py-0.5 rounded-full animate-pulse">
+              Book Now
+            </span>
+        </div>
+    </div>
+
+    <!-- Problem / Solution Section -->
+    <section class="py-20 bg-zinc-950 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <div class="space-y-6 reveal">
+                    <h2 class="text-3xl md:text-4xl font-bold font-display">
+                        Why most creators <span class="text-red-500">fail</span> in the GCC.
+                    </h2>
+                    <p class="text-zinc-400 text-lg leading-relaxed">
+                        Most creators focus on "viral hacks" and entertainment. They get views but <strong class="text-white">zero revenue</strong>. 
+                        <br /><br />
+                        At <span class="text-white font-bold">The Mayor Agency</span>, we don't just teach theory. We give you the exact 
+                        operating system we use to generate results for top brands and influencers.
+                    </p>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="flex items-center gap-3 p-4 bg-zinc-900/50 rounded-lg border border-white/5 hover:border-mayor-accent/30 transition-colors">
+                            <i data-lucide="check-circle-2" class="text-mayor-accent w-5 h-5 flex-shrink-0"></i>
+                            <span>Real Agency Workflows (Not YouTube tutorials)</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-zinc-900/50 rounded-lg border border-white/5 hover:border-mayor-accent/30 transition-colors">
+                            <i data-lucide="check-circle-2" class="text-mayor-accent w-5 h-5 flex-shrink-0"></i>
+                            <span>Local GCC Pricing & Brand Deal Strategies</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-zinc-900/50 rounded-lg border border-white/5 hover:border-mayor-accent/30 transition-colors">
+                            <i data-lucide="check-circle-2" class="text-mayor-accent w-5 h-5 flex-shrink-0"></i>
+                            <span>Direct Feedback from Experts (No generic advice)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animated Chart Mockup -->
+                <div class="w-full glass-panel p-8 rounded-2xl relative overflow-hidden reveal">
+                   <h3 class="text-xl font-bold mb-6">The "Mayor" Trajectory</h3>
+                   <div class="space-y-6">
+                     <!-- Bar 1 -->
+                     <div>
+                       <div class="flex justify-between mb-2 text-sm text-zinc-400">
+                         <span>Follower Growth</span>
+                         <span class="text-white">50K+</span>
+                       </div>
+                       <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                           <div class="h-full bg-gradient-to-r from-zinc-600 to-white w-0 transition-all duration-[1500ms] ease-out chart-bar" style="--w: 85%"></div>
+                       </div>
+                     </div>
+                     <!-- Bar 2 -->
+                     <div>
+                       <div class="flex justify-between mb-2 text-sm text-zinc-400">
+                         <span>Revenue Potential</span>
+                         <span class="text-mayor-accent">High</span>
+                       </div>
+                       <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                           <div class="h-full bg-gradient-to-r from-zinc-600 to-mayor-accent w-0 transition-all duration-[1500ms] ease-out delay-200 chart-bar" style="--w: 92%"></div>
+                       </div>
+                     </div>
+                   </div>
+                   
+                   <!-- Visual Graph Columns -->
+                   <div class="mt-8 flex items-end justify-between gap-1 h-32 opacity-80">
+                      <div class="w-full bg-zinc-700 rounded-t h-0 transition-all duration-500 graph-col" style="--h: 10%"></div>
+                      <div class="w-full bg-zinc-700 rounded-t h-0 transition-all duration-500 delay-[50ms] graph-col" style="--h: 20%"></div>
+                      <div class="w-full bg-zinc-700 rounded-t h-0 transition-all duration-500 delay-[100ms] graph-col" style="--h: 15%"></div>
+                      <div class="w-full bg-zinc-700 rounded-t h-0 transition-all duration-500 delay-[150ms] graph-col" style="--h: 40%"></div>
+                      <div class="w-full bg-zinc-700 rounded-t h-0 transition-all duration-500 delay-[200ms] graph-col" style="--h: 35%"></div>
+                      <div class="w-full bg-zinc-700 rounded-t h-0 transition-all duration-500 delay-[250ms] graph-col" style="--h: 60%"></div>
+                      <div class="w-full bg-mayor-accent rounded-t h-0 transition-all duration-500 delay-[300ms] graph-col" style="--h: 50%"></div>
+                      <div class="w-full bg-mayor-accent rounded-t h-0 transition-all duration-500 delay-[350ms] graph-col" style="--h: 80%"></div>
+                      <div class="w-full bg-mayor-accent rounded-t h-0 transition-all duration-500 delay-[400ms] graph-col" style="--h: 75%"></div>
+                      <div class="w-full bg-mayor-accent rounded-t h-0 transition-all duration-500 delay-[450ms] graph-col" style="--h: 100%"></div>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini Offer Box 2 -->
+    <div class="my-12 mx-auto max-w-sm glass-panel rounded-xl p-4 flex items-center justify-between shadow-[0_0_20px_rgba(230,159,112,0.15)] transform hover:scale-105 transition-all cursor-pointer reveal" onclick="scrollToForm()">
+        <div class="flex flex-col">
+            <span class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Limited Time Offer</span>
+            <div class="flex items-baseline gap-2">
+               <span class="text-sm line-through text-zinc-500">AED 5,000</span>
+               <span class="text-lg font-bold text-mayor-accent">AED 3,000</span>
+            </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+            <div class="flex items-center gap-1 text-mayor-accent font-mono text-xs font-bold bg-mayor-accent/10 px-2 py-1 rounded border border-mayor-accent/20">
+                <i data-lucide="clock" class="w-3 h-3"></i>
+                <span class="countdown-timer">23:59:59</span>
+            </div>
+            <span class="text-[10px] text-white bg-red-500/80 px-2 py-0.5 rounded-full animate-pulse">
+              Book Now
+            </span>
+        </div>
+    </div>
+
+    <!-- Curriculum Section -->
+    <section class="py-24 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+            <span class="text-mayor-accent font-mono text-sm uppercase tracking-widest">The Curriculum</span>
+            <h2 class="text-4xl md:text-5xl font-bold mt-2 font-display">6 Weeks to Professional Creator</h2>
+            <p class="text-zinc-400 mt-4">Every Saturday. Live Sessions + Recorded Access.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Card 1 -->
+            <div class="group relative p-8 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-mayor-accent/30 hover:bg-zinc-900/80 transition-all duration-300 overflow-hidden tilt-card reveal">
+                <div class="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-white group-hover:opacity-20 transition-opacity">01</div>
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:bg-mayor-accent group-hover:text-black transition-colors">
+                    <i data-lucide="target" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-white">Module 1: Mindset & Positioning</h3>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Identify your niche, creator identity, and overcome camera shyness.</p>
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-xs font-mono text-mayor-accent flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-3 h-3"></i> Output: Niche + Positioning
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="group relative p-8 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-mayor-accent/30 hover:bg-zinc-900/80 transition-all duration-300 overflow-hidden tilt-card reveal">
+                <div class="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-white group-hover:opacity-20 transition-opacity">02</div>
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:bg-mayor-accent group-hover:text-black transition-colors">
+                    <i data-lucide="calendar" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-white">Module 2: Content Systems</h3>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Planning a 30-day calendar, hook banks, and filming plans.</p>
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-xs font-mono text-mayor-accent flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-3 h-3"></i> Output: 30-Day Plan
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="group relative p-8 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-mayor-accent/30 hover:bg-zinc-900/80 transition-all duration-300 overflow-hidden tilt-card reveal">
+                <div class="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-white group-hover:opacity-20 transition-opacity">03</div>
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:bg-mayor-accent group-hover:text-black transition-colors">
+                    <i data-lucide="video" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-white">Module 3: Filming & Storytelling</h3>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Shooting high-quality videos, editing basics, and mastering retention.</p>
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-xs font-mono text-mayor-accent flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-3 h-3"></i> Output: 3 Videos Created
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="group relative p-8 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-mayor-accent/30 hover:bg-zinc-900/80 transition-all duration-300 overflow-hidden tilt-card reveal">
+                <div class="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-white group-hover:opacity-20 transition-opacity">04</div>
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:bg-mayor-accent group-hover:text-black transition-colors">
+                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-white">Module 4: Growth & Distribution</h3>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Platform strategies (IG/TikTok/YouTube), colabs, and checklists.</p>
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-xs font-mono text-mayor-accent flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-3 h-3"></i> Output: KPI Sheet
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="group relative p-8 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-mayor-accent/30 hover:bg-zinc-900/80 transition-all duration-300 overflow-hidden tilt-card reveal">
+                <div class="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-white group-hover:opacity-20 transition-opacity">05</div>
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:bg-mayor-accent group-hover:text-black transition-colors">
+                    <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-white">Module 5: Monetization</h3>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Pricing your services, brand deals vs retainers, and outreach scripts.</p>
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-xs font-mono text-mayor-accent flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-3 h-3"></i> Output: Media Kit
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="group relative p-8 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-mayor-accent/30 hover:bg-zinc-900/80 transition-all duration-300 overflow-hidden tilt-card reveal">
+                <div class="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-white group-hover:opacity-20 transition-opacity">06</div>
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:bg-mayor-accent group-hover:text-black transition-colors">
+                    <i data-lucide="briefcase" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-white">Module 6: Business Setup</h3>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Scaling with a team, legal basics, and avoiding burnout.</p>
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-xs font-mono text-mayor-accent flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-3 h-3"></i> Output: 90-Day Roadmap
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini Offer Box 3 -->
+    <div class="my-12 mx-auto max-w-sm glass-panel rounded-xl p-4 flex items-center justify-between shadow-[0_0_20px_rgba(230,159,112,0.15)] transform hover:scale-105 transition-all cursor-pointer reveal" onclick="scrollToForm()">
+        <div class="flex flex-col">
+            <span class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Limited Time Offer</span>
+            <div class="flex items-baseline gap-2">
+               <span class="text-sm line-through text-zinc-500">AED 5,000</span>
+               <span class="text-lg font-bold text-mayor-accent">AED 3,000</span>
+            </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+            <div class="flex items-center gap-1 text-mayor-accent font-mono text-xs font-bold bg-mayor-accent/10 px-2 py-1 rounded border border-mayor-accent/20">
+                <i data-lucide="clock" class="w-3 h-3"></i>
+                <span class="countdown-timer">23:59:59</span>
+            </div>
+            <span class="text-[10px] text-white bg-red-500/80 px-2 py-0.5 rounded-full animate-pulse">
+              Book Now
+            </span>
+        </div>
+    </div>
+
+    <!-- Target Audience -->
+    <section class="py-20 bg-zinc-900 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6 reveal">
+            <h2 class="text-3xl font-bold text-center mb-12 font-display">Who is this for?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 1 -->
+                <div class="bg-black/40 p-6 rounded-xl border border-white/5 text-center tilt-card">
+                    <div class="mx-auto w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="users" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-lg mb-2">Aspiring Creators</h4>
+                    <p class="text-zinc-500 text-sm">18-35 years old. You want to turn your passion into a career but don't know where to start.</p>
+                </div>
+                <!-- 2 -->
+                <div class="bg-black/40 p-6 rounded-xl border border-white/5 text-center relative overflow-hidden tilt-card">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-mayor-accent"></div>
+                    <div class="mx-auto w-12 h-12 bg-mayor-accent/20 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="trending-up" class="w-6 h-6 text-mayor-accent"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-lg mb-2">Micro-Influencers</h4>
+                    <p class="text-zinc-500 text-sm">2K-50K followers. You have an audience but aren't making consistent money yet.</p>
+                </div>
+                <!-- 3 -->
+                <div class="bg-black/40 p-6 rounded-xl border border-white/5 text-center tilt-card">
+                    <div class="mx-auto w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="briefcase" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-lg mb-2">Entrepreneurs</h4>
+                    <p class="text-zinc-500 text-sm">You want to build a Personal Brand to sell your services or products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers Placeholder -->
+    <section class="py-24 max-w-7xl mx-auto px-6 text-center reveal">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 font-display">Learn from the Experts</h2>
+        <p class="text-zinc-400 mb-12">Industry leaders teaching you their exact strategies.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Speaker 1 -->
+            <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-white/5">
+                <div class="aspect-[3/4] bg-zinc-800 relative">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/50 text-xs text-zinc-500 z-10">
+                        ADMIN: UPLOAD SPEAKER 1 IMAGE
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=688&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-50" alt="Speaker">
+                    <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black via-black/80 to-transparent z-20 text-left">
+                        <h4 class="text-xl font-bold text-white">Sarah Ahmed</h4>
+                        <p class="text-mayor-accent text-xs font-bold uppercase tracking-widest mt-1">Foundation & Personal Brand</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Speaker 2 -->
+            <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-white/5">
+                <div class="aspect-[3/4] bg-zinc-800 relative">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/50 text-xs text-zinc-500 z-10">
+                        ADMIN: UPLOAD SPEAKER 2 IMAGE
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=687&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-50" alt="Speaker">
+                    <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black via-black/80 to-transparent z-20 text-left">
+                        <h4 class="text-xl font-bold text-white">Omar Khaled</h4>
+                        <p class="text-mayor-accent text-xs font-bold uppercase tracking-widest mt-1">Content & Growth Strategy</p>
+                    </div>
+                </div>
+            </div>
+             <!-- Speaker 3 -->
+             <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-white/5">
+                <div class="aspect-[3/4] bg-zinc-800 relative">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/50 text-xs text-zinc-500 z-10">
+                        ADMIN: UPLOAD SPEAKER 3 IMAGE
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=687&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-50" alt="Speaker">
+                    <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black via-black/80 to-transparent z-20 text-left">
+                        <h4 class="text-xl font-bold text-white">The Mayor</h4>
+                        <p class="text-mayor-accent text-xs font-bold uppercase tracking-widest mt-1">Monetization & Sales</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: FAQ -->
+    <section class="py-20 bg-zinc-950 border-t border-white/5 relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute right-0 top-20 w-[300px] h-[300px] bg-mayor-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto px-6 reveal">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 font-display">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4" id="faq-container">
+                <!-- FAQ Item 1 -->
+                <div class="accordion-item glass-panel rounded-xl border border-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
+                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
+                        <h3 class="font-bold text-lg text-white">What is the time commitment?</h3>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-mayor-accent"></i>
+                        </div>
+                    </div>
+                    <div class="accordion-content px-6 text-zinc-400">
+                        <div class="pb-6">
+                            The program runs for 6 weeks, with sessions held every Saturday for 2.5 to 3 hours. We also recommend setting aside 2-3 hours per week for homework and content creation.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="accordion-item glass-panel rounded-xl border border-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
+                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
+                        <h3 class="font-bold text-lg text-white">What if I miss a live session?</h3>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-mayor-accent"></i>
+                        </div>
+                    </div>
+                    <div class="accordion-content px-6 text-zinc-400">
+                        <div class="pb-6">
+                            No problem. We offer a hybrid model where all live in-person sessions are recorded. You will have lifetime access to the recording portal to catch up at your own pace.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="accordion-item glass-panel rounded-xl border border-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
+                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
+                        <h3 class="font-bold text-lg text-white">Is there a refund policy?</h3>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-mayor-accent"></i>
+                        </div>
+                    </div>
+                    <div class="accordion-content px-6 text-zinc-400">
+                        <div class="pb-6">
+                            Yes. We want you to be confident in your decision. Refunds are available up until the start of Session 2. No refunds are issued after the first week to ensure commitment to the cohort.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="accordion-item glass-panel rounded-xl border border-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
+                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
+                        <h3 class="font-bold text-lg text-white">Will I receive a certificate?</h3>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-mayor-accent"></i>
+                        </div>
+                    </div>
+                    <div class="accordion-content px-6 text-zinc-400">
+                        <div class="pb-6">
+                            Absolutely. Upon successful completion of the 6 weeks and your final capstone project, you will receive an official "Content Creator Masterclass" certificate from The Mayor Agency.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="accordion-item glass-panel rounded-xl border border-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
+                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
+                        <h3 class="font-bold text-lg text-white">Where are the sessions held?</h3>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-mayor-accent"></i>
+                        </div>
+                    </div>
+                    <div class="accordion-content px-6 text-zinc-400">
+                        <div class="pb-6">
+                            Sessions are held in a premium coworking space or hotel meeting room in Dubai (Location TBD). You will receive full venue details in your onboarding email.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Large Flash Offer -->
+    <div class="max-w-4xl mx-auto px-6 mt-12 mb-24 reveal">
+        <div class="relative overflow-hidden rounded-2xl border border-mayor-accent/30 bg-zinc-900/80 backdrop-blur-xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_0_50px_rgba(230,159,112,0.1)] group">
+            <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-mayor-accent to-transparent"></div>
+            
+            <div class="flex flex-col gap-2 z-10">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold uppercase tracking-wider rounded-full border border-red-500/20 animate-pulse">
+                        Only 30 Seats
+                    </span>
+                    <span class="text-zinc-400 text-sm font-medium">Cohort 01 Closing Soon</span>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-white font-display">
+                    Launch Offer: <span class="line-through text-zinc-500 text-xl">AED 5,000</span> <span class="text-mayor-accent">AED 3,000</span>
+                </h3>
+            </div>
+
+            <div class="flex flex-col items-center md:items-end gap-2 z-10">
+                <p class="text-zinc-400 text-xs uppercase tracking-widest">Offer Ends In</p>
+                <div class="text-3xl font-mono text-mayor-accent font-bold countdown-timer">23:59:59</div>
+            </div>
+
+            <button onclick="scrollToForm()" class="z-10 group relative px-8 py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-mayor-accent transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center">
+                Apply Now
+                <i data-lucide="arrow-right" class="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Form -->
+    <section id="apply-form" class="py-12 px-6 max-w-3xl mx-auto mb-20 reveal">
+        <div class="glass-panel rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <!-- Background Glow -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-mayor-accent/10 blur-[100px] rounded-full pointer-events-none"></div>
+            
+            <div class="text-center mb-10 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-display">Apply for Cohort 01</h2>
+                <p class="text-zinc-400 max-w-md mx-auto">
+                    We screen every applicant to ensure they are serious about building a business. 
+                    <span class="block text-mayor-accent mt-2 font-bold">Only 30 Seats Available.</span>
+                </p>
+            </div>
+
+            <form id="masterclassForm" class="space-y-6 relative z-10" onsubmit="handleFormSubmit(event)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-zinc-300">Full Name</label>
+                        <input required name="name" type="text" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-mayor-accent focus:outline-none transition-colors" placeholder="John Doe">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-zinc-300">Phone (WhatsApp)</label>
+                        <input required name="phone" type="tel" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-mayor-accent focus:outline-none transition-colors" placeholder="+971 50 000 0000">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-zinc-300">Email Address</label>
+                    <input required name="email" type="email" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-mayor-accent focus:outline-none transition-colors" placeholder="you@example.com">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <div class="space-y-2">
+                      <label class="text-sm font-medium text-zinc-300">Current Followers (All Platforms)</label>
+                      <select name="followers" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-mayor-accent focus:outline-none transition-colors">
+                         <option value="0-2k">Just Starting (0 - 2K)</option>
+                         <option value="2k-10k">Growing (2K - 10K)</option>
+                         <option value="10k-50k">Micro-Influencer (10K - 50K)</option>
+                         <option value="50k+">Established (50K+)</option>
+                      </select>
+                   </div>
+                   <div class="space-y-2">
+                      <label class="text-sm font-medium text-zinc-300">Link to Main Platform</label>
+                      <input required name="social" type="url" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-mayor-accent focus:outline-none transition-colors" placeholder="https://instagram.com/...">
+                   </div>
+                </div>
+
+                <div class="space-y-2">
+                   <label class="text-sm font-medium text-zinc-300">What is your #1 Goal?</label>
+                   <select name="goal" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-mayor-accent focus:outline-none transition-colors">
+                      <option value="monetization">Start Monetizing & Brand Deals</option>
+                      <option value="growth">Grow Audience & Consistency</option>
+                      <option value="business">Launch a Personal Brand Business</option>
+                   </select>
+                </div>
+
+                <button type="submit" class="w-full bg-mayor-accent text-black font-bold text-lg py-4 rounded-lg hover:bg-[#d18e62] transition-all shadow-[0_0_20px_rgba(230,159,112,0.4)] hover:shadow-[0_0_30px_rgba(230,159,112,0.6)] transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    Submit Application
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+                
+                <p class="text-center text-xs text-zinc-500 mt-4">
+                    By submitting, you agree to receive WhatsApp messages regarding your application status.
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 text-center text-zinc-500 text-sm bg-zinc-950">
+        <p>&copy; 2026 The Mayor Agency. All rights reserved.</p>
+        <div class="flex justify-center gap-6 mt-4">
+           <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+           <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 1. Initialize Lucide Icons
+        lucide.createIcons();
+
+        // 2. Countdown Timer Logic
+        function startTimer() {
+            let timeLeft = { hours: 23, minutes: 59, seconds: 59 };
+            const timerElements = document.querySelectorAll('.countdown-timer');
+
+            setInterval(() => {
+                if (timeLeft.seconds > 0) {
+                    timeLeft.seconds--;
+                } else if (timeLeft.minutes > 0) {
+                    timeLeft.minutes--;
+                    timeLeft.seconds = 59;
+                } else if (timeLeft.hours > 0) {
+                    timeLeft.hours--;
+                    timeLeft.minutes = 59;
+                    timeLeft.seconds = 59;
+                }
+
+                const timeString = 
+                    String(timeLeft.hours).padStart(2, '0') + ':' + 
+                    String(timeLeft.minutes).padStart(2, '0') + ':' + 
+                    String(timeLeft.seconds).padStart(2, '0');
+
+                timerElements.forEach(el => el.innerText = timeString);
+            }, 1000);
+        }
+        startTimer();
+
+        // 3. Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Trigger Chart Animations if inside chart container
+                    const bars = entry.target.querySelectorAll('.chart-bar');
+                    if(bars.length > 0) {
+                        bars.forEach(bar => {
+                            bar.style.width = bar.style.getPropertyValue('--w');
+                        });
+                    }
+
+                    const cols = entry.target.querySelectorAll('.graph-col');
+                    if(cols.length > 0) {
+                        cols.forEach(col => {
+                            col.style.height = col.style.getPropertyValue('--h');
+                        });
+                    }
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 4. Smooth Scroll to Form
+        function scrollToForm() {
+            document.getElementById('apply-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 5. Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            document.getElementById('progress-bar').style.width = scrollPercent + '%';
+        });
+
+        // 6. Form Submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            console.log('SENDING DATA TO m.nagia@themayor.me:', data);
+            
+            // Simulate API call
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Sending...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Application Submitted! We will contact you on WhatsApp shortly.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                e.target.reset();
+            }, 1500);
+        }
+
+        // 7. 3D Tilt Effect (Vanilla JS Implementation)
+        const cards = document.querySelectorAll('.tilt-card, .tilt-card-trigger');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -5; // Max -5deg to 5deg
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+        // 8. FAQ Accordion Logic
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const content = item.querySelector('.accordion-content');
+            
+            // Close other items
+            document.querySelectorAll('.accordion-item').forEach(otherItem => {
+                if (otherItem !== item && otherItem.classList.contains('active')) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.accordion-content').style.maxHeight = null;
+                }
+            });
+
+            // Toggle current item
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+                content.style.maxHeight = null;
+            } else {
+                item.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+
+    </script>
+</body>
+</html>

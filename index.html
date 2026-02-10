@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Creator Masterclass | Cohort 01</title>
+    <title>Content Creator Masterclass | Elite Cohort</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,9 +32,13 @@
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
                         'breath-pop': 'breathPop 4s ease-in-out infinite',
                         'glow': 'glow 2s ease-in-out infinite alternate',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'spin-slow': 'spin 12s linear infinite',
                     },
                     keyframes: {
                         float: {
@@ -48,6 +52,14 @@
                         glow: {
                             '0%': { boxShadow: '0 0 5px rgba(230,159,112,0.2)' },
                             '100%': { boxShadow: '0 0 20px rgba(230,159,112,0.6)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' }
                         }
                     }
                 }
@@ -76,65 +88,70 @@
         
         /* Navbar Glass */
         .nav-glass {
-            background: rgba(2, 6, 23, 0.8);
+            background: rgba(2, 6, 23, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* FAQ Accordion Styles */
-        .accordion-content {
-            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        .accordion-item.active .accordion-content {
-            opacity: 1;
-        }
-        .accordion-item.active .accordion-icon {
-            transform: rotate(180deg);
-            color: #E69F70;
-        }
-        .accordion-item.active {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(230, 159, 112, 0.3);
-        }
-        
-        /* Specific Styles for Problem Section */
+        /* Specific Styles */
         .problem-card:hover {
             border-color: #E69F70;
             transform: translateY(-5px);
             box-shadow: 0 10px 30px -10px rgba(230, 159, 112, 0.2);
         }
+
+        /* Grid Background Animation */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
     </style>
 </head>
 <body class="bg-mayor-navy text-white overflow-x-hidden selection:bg-mayor-accent selection:text-black font-sans">
 
-    <!-- NAVIGATION BAR (Stacked: Button + Offer) -->
-    <nav class="fixed top-0 w-full z-50 nav-glass transition-all duration-300 pb-4 pt-2" id="navbar">
+    <!-- GLOBAL SCROLL PROGRESS BAR -->
+    <div class="fixed top-0 left-0 h-1 bg-gradient-to-r from-mayor-accent via-white to-mayor-accent z-[100] w-0 transition-all duration-100 ease-out shadow-[0_0_10px_#E69F70]" id="scroll-progress"></div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 w-full z-50 nav-glass transition-all duration-300 pb-2 pt-2" id="navbar">
         <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-3">
             
-            <!-- 1. Secure Seat Button -->
-            <button onclick="scrollToForm()" class="px-10 py-2 bg-mayor-accent text-black font-bold text-sm tracking-widest uppercase rounded-full shadow-[0_0_20px_rgba(230,159,112,0.4)] hover:shadow-[0_0_40px_rgba(230,159,112,0.6)] hover:scale-105 transition-all transform duration-300 flex items-center gap-2">
-                <i data-lucide="lock" class="w-4 h-4"></i> Secure Your Seat
-            </button>
+            <div class="flex items-center gap-4 w-full justify-center relative">
+                <!-- 1. Secure Seat Button -->
+                <button onclick="scrollToForm()" class="px-8 py-2 bg-mayor-accent text-black font-bold text-xs md:text-sm tracking-widest uppercase rounded-full shadow-[0_0_20px_rgba(230,159,112,0.4)] hover:shadow-[0_0_40px_rgba(230,159,112,0.6)] hover:scale-105 transition-all transform duration-300 flex items-center gap-2 group">
+                    <i data-lucide="lock" class="w-4 h-4 group-hover:animate-pulse"></i> Secure Your Seat
+                </button>
 
-            <!-- 2. The Offer Box (Modified: Red Alarm Badge + Clickable) -->
-            <div onclick="scrollToForm()" class="group cursor-pointer relative flex items-center gap-4 bg-black/40 border border-white/10 px-6 py-2 rounded-xl backdrop-blur-md transition-all hover:bg-white/5 hover:border-mayor-accent/30">
-                
-                <!-- NEW: Red Alarm "Book Now" Badge -->
-                <div class="absolute -top-3 -right-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.6)] flex items-center gap-1 border border-white/20 z-10 group-hover:scale-110 transition-transform">
-                    <i data-lucide="alarm-clock" class="w-3 h-3"></i> BOOK NOW
-                </div>
+                <!-- 2. The Offer Box -->
+                <div onclick="scrollToForm()" class="group cursor-pointer relative flex items-center gap-4 bg-black/40 border border-white/10 px-4 py-2 rounded-xl backdrop-blur-md transition-all hover:bg-white/5 hover:border-mayor-accent/30 hidden md:flex">
+                    
+                    <!-- Red Alarm "Book Now" Badge -->
+                    <div class="absolute -top-3 -right-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.6)] flex items-center gap-1 border border-white/20 z-10 group-hover:scale-110 transition-transform">
+                        <i data-lucide="alarm-clock" class="w-3 h-3"></i> BOOK NOW
+                    </div>
 
-                <div class="flex flex-col items-center leading-none border-r border-white/10 pr-4">
-                    <span class="text-[10px] text-zinc-400 uppercase tracking-wider group-hover:text-white transition-colors">Offer Ends In</span>
-                    <div class="font-mono text-mayor-accent font-bold text-lg countdown-timer">23:59:59</div>
+                    <div class="flex flex-col items-center leading-none border-r border-white/10 pr-4">
+                        <span class="text-[10px] text-zinc-400 uppercase tracking-wider group-hover:text-white transition-colors">Offer Ends In</span>
+                        <div class="font-mono text-mayor-accent font-bold text-lg countdown-timer">23:59:59</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-zinc-500 line-through decoration-red-500/50">AED 5,000</span>
+                        <span class="text-xl font-bold text-white group-hover:text-mayor-accent transition-colors">AED 3,000</span>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-sm text-zinc-500 line-through decoration-red-500/50">AED 5,000</span>
-                    <span class="text-xl font-bold text-white group-hover:text-mayor-accent transition-colors">AED 3,000</span>
+            </div>
+
+            <!-- 3. CAPACITY PROGRESS BAR (Live FOMO) -->
+            <div class="w-full max-w-md flex flex-col gap-1">
+                <div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-mayor-accent px-1">
+                    <span class="animate-pulse">Cohort Filling Fast</span>
+                    <span>87% Full</span>
+                </div>
+                <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-red-600 to-mayor-accent w-[87%] rounded-full shadow-[0_0_10px_rgba(230,159,112,0.5)] animate-pulse-slow"></div>
                 </div>
             </div>
 
@@ -142,30 +159,34 @@
     </nav>
 
     <!-- HERO SECTION -->
-    <header class="relative pt-44 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center text-center">
+    <header class="relative pt-48 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center text-center overflow-hidden">
+        <!-- Animated Background Grid -->
+        <div class="absolute inset-0 bg-grid opacity-20 pointer-events-none animate-pulse-slow"></div>
+        
         <!-- Background Lighting -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none"></div>
-        <div class="absolute top-20 right-20 w-64 h-64 bg-mayor-accent/5 rounded-full blur-[100px] pointer-events-none animate-float"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none animate-float"></div>
+        <div class="absolute top-40 right-20 w-64 h-64 bg-mayor-accent/5 rounded-full blur-[100px] pointer-events-none animate-float-delayed"></div>
 
         <div class="space-y-8 max-w-5xl z-10 reveal active">
             
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-blue-200 uppercase tracking-widest">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-blue-200 uppercase tracking-widest hover:border-mayor-accent/50 transition-colors cursor-default">
                 <span class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></span>
                 Cohort 01 Applications Open
             </div>
             
             <h1 class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[1] font-display">
                 Content Creator <br />
-                <span class="text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-100 to-mayor-accent animate-breath-pop inline-block cursor-default">
+                <span class="text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-100 to-mayor-accent animate-breath-pop inline-block cursor-default relative">
                     Masterclass
+                    <span class="absolute -inset-1 bg-mayor-accent/20 blur-xl opacity-50 animate-pulse"></span>
                 </span>
             </h1>
             
             <p class="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-light">
                 A step-by-step system to become a paid creator in the GCC. <br />
-                <span class="text-white font-medium border-b border-mayor-accent/30 pb-0.5">Content</span> &rarr; 
-                <span class="text-white font-medium border-b border-mayor-accent/30 pb-0.5">Audience</span> &rarr; 
-                <span class="text-white font-medium border-b border-mayor-accent/30 pb-0.5">Revenue</span>.
+                <span class="text-white font-medium border-b border-mayor-accent/30 pb-0.5 hover:text-mayor-accent transition-colors">Content</span> &rarr; 
+                <span class="text-white font-medium border-b border-mayor-accent/30 pb-0.5 hover:text-mayor-accent transition-colors">Audience</span> &rarr; 
+                <span class="text-white font-medium border-b border-mayor-accent/30 pb-0.5 hover:text-mayor-accent transition-colors">Revenue</span>.
             </p>
 
             <!-- 3D Video Placeholder -->
@@ -174,12 +195,14 @@
                 
                 <!-- Play Button -->
                 <div class="absolute inset-0 flex items-center justify-center z-20 group-hover:scale-110 transition-transform duration-500">
-                    <div class="w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 transition-all hover:bg-mayor-accent hover:border-mayor-accent group-hover:text-black shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                        <i data-lucide="play" class="w-10 h-10 text-white fill-white ml-2 group-hover:text-black group-hover:fill-black transition-colors"></i>
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-mayor-accent rounded-full animate-ping opacity-20"></div>
+                        <div class="w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 transition-all hover:bg-mayor-accent hover:border-mayor-accent group-hover:text-black shadow-[0_0_30px_rgba(255,255,255,0.1)] relative z-10">
+                            <i data-lucide="play" class="w-10 h-10 text-white fill-white ml-2 group-hover:text-black group-hover:fill-black transition-colors"></i>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Labels -->
                 <div class="absolute bottom-8 left-8 text-left z-20">
                     <p class="text-xs font-bold uppercase tracking-widest text-mayor-accent mb-2">Watch Trailer</p>
                     <p class="text-2xl font-display font-bold">How to turn views into business</p>
@@ -190,32 +213,91 @@
         </div>
     </header>
 
+    <!-- INFINITE MARQUEE -->
+    <section class="py-6 border-y border-white/5 bg-black/50 overflow-hidden relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-mayor-navy via-transparent to-mayor-navy z-10 pointer-events-none"></div>
+        <div class="flex whitespace-nowrap animate-marquee">
+            <div class="flex gap-12 text-zinc-500 font-display text-4xl font-bold uppercase tracking-tighter opacity-30 items-center">
+                <span>Strategy</span> <span class="text-mayor-accent">•</span>
+                <span>Monetization</span> <span class="text-mayor-accent">•</span>
+                <span>Production</span> <span class="text-mayor-accent">•</span>
+                <span>Viral Growth</span> <span class="text-mayor-accent">•</span>
+                <span>Business</span> <span class="text-mayor-accent">•</span>
+                <span>Strategy</span> <span class="text-mayor-accent">•</span>
+                <span>Monetization</span> <span class="text-mayor-accent">•</span>
+                <span>Production</span> <span class="text-mayor-accent">•</span>
+                <span>Viral Growth</span> <span class="text-mayor-accent">•</span>
+                <span>Business</span> <span class="text-mayor-accent">•</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ANIMATED KPI SECTION -->
+    <section class="py-16 border-b border-white/5 bg-white/5 backdrop-blur-sm relative" id="stats-section">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="relative group">
+                <div class="absolute inset-0 bg-mayor-accent/5 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 flex justify-center items-center gap-1">
+                    <span class="counter" data-target="50">0</span>+
+                </div>
+                <div class="text-xs text-mayor-accent uppercase tracking-widest flex justify-center items-center gap-2">
+                    <i data-lucide="play-circle" class="w-4 h-4 animate-spin-slow"></i> Video Lessons
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="absolute inset-0 bg-mayor-accent/5 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 flex justify-center items-center gap-1">
+                    <span class="counter" data-target="6">0</span>
+                </div>
+                <div class="text-xs text-mayor-accent uppercase tracking-widest flex justify-center items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4 animate-pulse"></i> Weeks Live
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="absolute inset-0 bg-mayor-accent/5 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 flex justify-center items-center gap-1">
+                    <span class="counter" data-target="300">0</span>+
+                </div>
+                <div class="text-xs text-mayor-accent uppercase tracking-widest flex justify-center items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4"></i> Graduates
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="absolute inset-0 bg-mayor-accent/5 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 flex justify-center items-center gap-1">
+                    <span class="text-mayor-accent">$</span><span class="counter" data-target="2">0</span>M+
+                </div>
+                <div class="text-xs text-mayor-accent uppercase tracking-widest flex justify-center items-center gap-2">
+                    <i data-lucide="trending-up" class="w-4 h-4 animate-bounce"></i> Client Revenue
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- WHY CREATORS FAIL -->
-    <section class="py-24 relative border-y border-white/5 bg-[#03081c]">
+    <section class="py-24 relative bg-[#03081c]">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row gap-16 items-start">
                 
-                <!-- Left: The Problem -->
                 <div class="flex-1 space-y-8 reveal">
                     <div>
                         <h2 class="text-4xl md:text-5xl font-bold font-display leading-tight">
                             Why most creators <br />
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">FAIL</span> in the GCC.
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 animate-pulse-slow">FAIL</span> in the GCC.
                         </h2>
                         <p class="text-xl text-zinc-400 mt-6 leading-relaxed">
                             Most creators focus on "viral hacks" and entertainment. They get millions of views but <span class="text-white font-bold border-b-2 border-red-500">zero revenue</span>.
                         </p>
                     </div>
                     
-                    <div class="p-6 rounded-2xl bg-red-500/5 border border-red-500/20">
+                    <div class="p-6 rounded-2xl bg-red-500/5 border border-red-500/20 hover:bg-red-500/10 transition-colors">
                         <h4 class="text-red-400 font-bold mb-2 flex items-center gap-2">
-                            <i data-lucide="x-circle" class="w-5 h-5"></i> The Common Trap:
+                            <i data-lucide="x-circle" class="w-5 h-5 animate-pulse"></i> The Common Trap:
                         </h4>
                         <p class="text-zinc-400 text-sm">Random Content ➔ Viral Luck ➔ No Product ➔ Burnout.</p>
                     </div>
                 </div>
 
-                <!-- Right: The Masterclass Solution -->
                 <div class="flex-1 w-full reveal" style="transition-delay: 200ms;">
                     <div class="space-y-6">
                         <div class="mb-6">
@@ -223,9 +305,9 @@
                             <p class="text-zinc-400">We don't teach theory. We give you the <span class="text-mayor-accent">exact operating system</span> we use to generate results.</p>
                         </div>
 
-                        <!-- Card 1 -->
-                        <div class="problem-card flex gap-4 p-5 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 cursor-default">
-                            <div class="w-12 h-12 rounded-full bg-mayor-accent/10 flex items-center justify-center flex-shrink-0 text-mayor-accent">
+                        <!-- Animated Hover Cards -->
+                        <div class="problem-card flex gap-4 p-5 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 cursor-default group">
+                            <div class="w-12 h-12 rounded-full bg-mayor-accent/10 flex items-center justify-center flex-shrink-0 text-mayor-accent group-hover:bg-mayor-accent group-hover:text-black transition-colors">
                                 <i data-lucide="briefcase" class="w-6 h-6"></i>
                             </div>
                             <div>
@@ -234,9 +316,8 @@
                             </div>
                         </div>
 
-                        <!-- Card 2 -->
-                        <div class="problem-card flex gap-4 p-5 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 cursor-default">
-                            <div class="w-12 h-12 rounded-full bg-mayor-accent/10 flex items-center justify-center flex-shrink-0 text-mayor-accent">
+                        <div class="problem-card flex gap-4 p-5 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 cursor-default group">
+                            <div class="w-12 h-12 rounded-full bg-mayor-accent/10 flex items-center justify-center flex-shrink-0 text-mayor-accent group-hover:bg-mayor-accent group-hover:text-black transition-colors">
                                 <i data-lucide="tag" class="w-6 h-6"></i>
                             </div>
                             <div>
@@ -245,9 +326,8 @@
                             </div>
                         </div>
 
-                        <!-- Card 3 -->
-                        <div class="problem-card flex gap-4 p-5 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 cursor-default">
-                            <div class="w-12 h-12 rounded-full bg-mayor-accent/10 flex items-center justify-center flex-shrink-0 text-mayor-accent">
+                        <div class="problem-card flex gap-4 p-5 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 cursor-default group">
+                            <div class="w-12 h-12 rounded-full bg-mayor-accent/10 flex items-center justify-center flex-shrink-0 text-mayor-accent group-hover:bg-mayor-accent group-hover:text-black transition-colors">
                                 <i data-lucide="message-square" class="w-6 h-6"></i>
                             </div>
                             <div>
@@ -263,38 +343,32 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: LEARN FROM EXPERTS (ADDED HERE) -->
+    <!-- EXPERT SECTION -->
     <section class="py-24 relative bg-black border-y border-white/5 overflow-hidden">
-        <!-- Accent Glow -->
-        <div class="absolute -left-20 top-1/2 -translate-y-1/2 w-64 h-64 bg-mayor-accent/5 rounded-full blur-[80px] pointer-events-none"></div>
+        <div class="absolute -left-20 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-mayor-accent/5 rounded-full blur-[80px] pointer-events-none animate-float"></div>
 
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
                 
-                <!-- Image Side -->
                 <div class="w-full md:w-1/2 relative reveal">
                     <div class="aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative group">
-                        <div class="absolute inset-0 bg-mayor-accent/10 mix-blend-overlay z-10"></div>
-                        <!-- Placeholder Image - Replace with Teacher's Photo -->
+                        <div class="absolute inset-0 bg-mayor-accent/10 mix-blend-overlay z-10 transition-opacity duration-500 group-hover:opacity-0"></div>
                         <img src="https://image2url.com/r2/default/images/1770735946632-f2ac11cb-4e3e-4d54-ba1f-a454b43354ee.png" alt="Expert Instructor" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 grayscale hover:grayscale-0">
                         
-                        <!-- Overlay details -->
-                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black via-black/90 to-transparent z-20">
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black via-black/90 to-transparent z-20 translate-y-2 group-hover:translate-y-0 transition-transform">
                             <p class="text-mayor-accent font-mono text-sm tracking-widest uppercase mb-1">Your Instructor</p>
                             <h3 class="text-white text-3xl font-display font-bold">DR/Mohamed NAGIA</h3>
                             <p class="text-zinc-400 text-sm mt-2">Founder & Lead Strategist</p>
                         </div>
                     </div>
-                    <!-- Decorative Element -->
                     <div class="absolute -bottom-6 -right-6 w-24 h-24 border-r-2 border-b-2 border-mayor-accent/20 rounded-br-3xl"></div>
                 </div>
 
-                <!-- Content Side -->
                 <div class="w-full md:w-1/2 space-y-8 reveal" style="transition-delay: 200ms;">
                     <div>
                         <h2 class="text-4xl md:text-5xl font-bold font-display leading-tight mb-6">
                             Learn from the <br />
-                            <span class="text-mayor-accent">Experts</span>
+                            <span class="text-mayor-accent inline-block animate-pulse-slow">Experts</span>
                         </h2>
                         <p class="text-xl text-zinc-400 leading-relaxed border-l-2 border-mayor-accent/30 pl-6">
                             Industry leaders teaching you their exact strategies. No theory, just proven blueprints from the trenches of the creator economy.
@@ -303,28 +377,26 @@
 
                     <div class="space-y-6 pt-4">
                         <div class="flex items-start gap-4 group">
-                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 mt-1 shrink-0 group-hover:border-mayor-accent/50 transition-colors">
-                                <i data-lucide="award" class="w-6 h-6 text-mayor-accent"></i>
+                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 mt-1 shrink-0 group-hover:border-mayor-accent/50 group-hover:bg-mayor-accent/10 transition-all duration-300">
+                                <i data-lucide="award" class="w-6 h-6 text-mayor-accent group-hover:scale-110 transition-transform"></i>
                             </div>
                             <div>
                                 <h4 class="text-white font-bold text-lg group-hover:text-mayor-accent transition-colors">Proven Track Record</h4>
                                 <p class="text-zinc-500 text-sm mt-1">Strategies backed by millions of views and generated revenue for top brands.</p>
                             </div>
                         </div>
-                        
                         <div class="flex items-start gap-4 group">
-                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 mt-1 shrink-0 group-hover:border-mayor-accent/50 transition-colors">
-                                <i data-lucide="users" class="w-6 h-6 text-mayor-accent"></i>
+                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 mt-1 shrink-0 group-hover:border-mayor-accent/50 group-hover:bg-mayor-accent/10 transition-all duration-300">
+                                <i data-lucide="users" class="w-6 h-6 text-mayor-accent group-hover:scale-110 transition-transform"></i>
                             </div>
                             <div>
                                 <h4 class="text-white font-bold text-lg group-hover:text-mayor-accent transition-colors">Inside Network</h4>
                                 <p class="text-zinc-500 text-sm mt-1">Direct access to the systems used by the biggest personal brands in the GCC.</p>
                             </div>
                         </div>
-
                         <div class="flex items-start gap-4 group">
-                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 mt-1 shrink-0 group-hover:border-mayor-accent/50 transition-colors">
-                                <i data-lucide="target" class="w-6 h-6 text-mayor-accent"></i>
+                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 mt-1 shrink-0 group-hover:border-mayor-accent/50 group-hover:bg-mayor-accent/10 transition-all duration-300">
+                                <i data-lucide="target" class="w-6 h-6 text-mayor-accent group-hover:scale-110 transition-transform"></i>
                             </div>
                             <div>
                                 <h4 class="text-white font-bold text-lg group-hover:text-mayor-accent transition-colors">Actionable Steps</h4>
@@ -340,8 +412,7 @@
 
     <!-- TESTIMONIALS -->
     <section class="py-24 relative overflow-hidden">
-        <!-- Decoration -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
 
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="text-center mb-16 reveal">
@@ -351,7 +422,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-1000">
-                
                 <!-- Review 1 -->
                 <div class="tilt-card p-8 rounded-2xl relative group hover:border-mayor-accent/30 transition-colors reveal">
                     <div class="flex items-center gap-4 mb-6">
@@ -368,7 +438,6 @@
                         "I was stuck at 5k followers for a year. The <span class="text-white font-bold">content systems</span> module completely changed my workflow. I hit 50k in 3 months and signed my first retainer deal."
                     </p>
                 </div>
-
                 <!-- Review 2 -->
                 <div class="tilt-card p-8 rounded-2xl relative group hover:border-mayor-accent/30 transition-colors reveal" style="transition-delay: 100ms;">
                     <div class="flex items-center gap-4 mb-6">
@@ -385,7 +454,6 @@
                         "Finally, someone teaching <span class="text-white font-bold">local pricing strategies</span>. I realized I was undercharging by 70%. The media kit template alone paid for the course 10x over."
                     </p>
                 </div>
-
                 <!-- Review 3 -->
                 <div class="tilt-card p-8 rounded-2xl relative group hover:border-mayor-accent/30 transition-colors reveal" style="transition-delay: 200ms;">
                     <div class="flex items-center gap-4 mb-6">
@@ -402,7 +470,6 @@
                         "The direct feedback sessions are brutal but necessary. They don't sugarcoat it. If you want to build a real business and not just be 'famous', this is the only masterclass you need."
                     </p>
                 </div>
-
             </div>
         </div>
     </section>
@@ -415,59 +482,71 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cards (Modules) -->
-            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal">
-                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent">
+            <!-- Cards (Modules) with Animated Icons -->
+            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal group">
+                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
                     <i data-lucide="brain-circuit" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2">1. Mindset & Positioning</h3>
                 <p class="text-zinc-400 text-sm mb-4">Define your niche and creator identity. Overcome camera shyness.</p>
-                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent">Output: Positioning Statement</div>
+                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent flex items-center gap-2">
+                    <div class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></div> Output: Positioning Statement
+                </div>
             </div>
-            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal">
-                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent">
+            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal group">
+                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
                     <i data-lucide="calendar-check" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2">2. Content Systems</h3>
                 <p class="text-zinc-400 text-sm mb-4">Never run out of ideas. 30-day calendars and hook banks.</p>
-                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent">Output: 30-Day Content Plan</div>
+                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent flex items-center gap-2">
+                    <div class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></div> Output: 30-Day Content Plan
+                </div>
             </div>
-            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal">
-                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent">
+            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal group">
+                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
                     <i data-lucide="clapperboard" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2">3. Pro Production</h3>
                 <p class="text-zinc-400 text-sm mb-4">Shoot high-quality video with your phone. Editing secrets.</p>
-                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent">Output: 3 Polished Videos</div>
+                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent flex items-center gap-2">
+                    <div class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></div> Output: 3 Polished Videos
+                </div>
             </div>
-            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal">
-                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent">
+            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal group">
+                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
                     <i data-lucide="rocket" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2">4. Growth Strategy</h3>
                 <p class="text-zinc-400 text-sm mb-4">Algorithm secrets for IG, TikTok & YouTube. Distribution checklist.</p>
-                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent">Output: Growth KPI Sheet</div>
+                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent flex items-center gap-2">
+                    <div class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></div> Output: Growth KPI Sheet
+                </div>
             </div>
-            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal">
-                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent">
+            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal group">
+                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
                     <i data-lucide="banknote" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2">5. Monetization</h3>
                 <p class="text-zinc-400 text-sm mb-4">Pricing your services. Brand outreach scripts. Deal structure.</p>
-                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent">Output: Professional Media Kit</div>
+                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent flex items-center gap-2">
+                    <div class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></div> Output: Professional Media Kit
+                </div>
             </div>
-            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal">
-                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent">
+            <div class="tilt-card p-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors reveal group">
+                <div class="w-12 h-12 bg-mayor-navy border border-white/10 rounded-lg flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
                     <i data-lucide="briefcase" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2">6. Business Setup</h3>
                 <p class="text-zinc-400 text-sm mb-4">Legal basics, scaling with a team, and avoiding burnout.</p>
-                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent">Output: 90-Day Roadmap</div>
+                <div class="pt-4 border-t border-white/5 text-xs font-mono text-mayor-accent flex items-center gap-2">
+                    <div class="w-2 h-2 bg-mayor-accent rounded-full animate-pulse"></div> Output: 90-Day Roadmap
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- BEFORE VS AFTER TRANSFORMATION -->
+    <!-- TRANSFORMATION SECTION -->
     <section class="py-24 relative border-t border-white/5 bg-mayor-navy overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="text-center mb-16 reveal">
@@ -502,7 +581,7 @@
                     </div>
                 </div>
 
-                <!-- ARROW (Desktop only) -->
+                <!-- ARROW -->
                 <div class="hidden md:flex justify-center text-mayor-accent animate-pulse-slow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-mayor-navy p-3 rounded-full border border-mayor-accent/20 shadow-xl">
                     <i data-lucide="arrow-right" class="w-8 h-8"></i>
                 </div>
@@ -536,7 +615,7 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: WHO IS THIS FOR? -->
+    <!-- WHO IS THIS FOR -->
     <section class="py-24 bg-[#03081c] relative border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
@@ -545,7 +624,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
                 <!-- Card 1 -->
                 <div class="tilt-card p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-mayor-accent/50 transition-all group reveal">
                     <div class="w-14 h-14 bg-mayor-accent/10 rounded-xl flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
@@ -556,7 +634,6 @@
                         You have zero followers (or very few) and want to start the <strong>right way</strong> without wasting years on trial and error.
                     </p>
                 </div>
-
                 <!-- Card 2 -->
                 <div class="tilt-card p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-mayor-accent/50 transition-all group reveal" style="transition-delay: 100ms">
                     <div class="w-14 h-14 bg-mayor-accent/10 rounded-xl flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
@@ -567,7 +644,6 @@
                         You have followers but <strong>zero revenue</strong>. You're tired of "barter deals" and want to sign paid retainers.
                     </p>
                 </div>
-
                 <!-- Card 3 -->
                 <div class="tilt-card p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-mayor-accent/50 transition-all group reveal" style="transition-delay: 200ms">
                     <div class="w-14 h-14 bg-mayor-accent/10 rounded-xl flex items-center justify-center mb-6 text-mayor-accent group-hover:scale-110 transition-transform">
@@ -578,15 +654,14 @@
                         You have a business and want to build a <strong>Personal Brand</strong> to drive leads and sales without relying on ads.
                     </p>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- NEW FAQ SECTION -->
+    <!-- POPUP FAQ SECTION -->
     <section class="py-24 relative border-t border-white/5 bg-[#01040f]">
         <!-- Background Decor -->
-        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-96 h-96 bg-mayor-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div class="absolute right-0 top-1/2 -translate-x-1/2 w-96 h-96 bg-mayor-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div class="max-w-4xl mx-auto px-6 reveal">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 font-display">Frequently Asked Questions</h2>
@@ -594,77 +669,84 @@
             <div class="space-y-4" id="faq-container">
                 
                 <!-- Q1 -->
-                <div class="accordion-item rounded-xl border border-white/5 bg-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
-                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
-                        <h3 class="font-bold text-lg text-white">Who is this masterclass for?</h3>
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
-                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
-                        </div>
+                <div class="faq-item p-6 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group" onclick="openModal(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-white">Who is this masterclass specifically for?</h3>
+                        <i data-lucide="external-link" class="w-5 h-5 text-zinc-500 group-hover:text-mayor-accent transition-colors"></i>
                     </div>
-                    <div class="accordion-content px-6 text-zinc-400">
-                        <div class="pb-6 border-t border-white/5 pt-4">
-                            It's specifically for aspiring creators, micro-influencers (2K-50K followers), and entrepreneurs in the GCC who want to turn content into a revenue stream.
-                        </div>
+                    <div class="answer-content hidden">
+                        This program is designed for three specific groups:
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-zinc-400">
+                            <li><strong>Aspiring Creators:</strong> Who want to start with a proven roadmap instead of guessing.</li>
+                            <li><strong>Business Owners:</strong> Who want to build a personal brand to drive sales (organic marketing).</li>
+                            <li><strong>Stuck Influencers:</strong> Who have followers (5k-50k) but are struggling to monetize effectively.</li>
+                        </ul>
                     </div>
                 </div>
 
                 <!-- Q2 -->
-                <div class="accordion-item rounded-xl border border-white/5 bg-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
-                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
-                        <h3 class="font-bold text-lg text-white">What is the time commitment?</h3>
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
-                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
-                        </div>
+                <div class="faq-item p-6 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group" onclick="openModal(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-white">Do I need expensive camera gear to join?</h3>
+                        <i data-lucide="external-link" class="w-5 h-5 text-zinc-500 group-hover:text-mayor-accent transition-colors"></i>
                     </div>
-                    <div class="accordion-content px-6 text-zinc-400">
-                        <div class="pb-6 border-t border-white/5 pt-4">
-                            The program runs for 6 weeks. Sessions are held every Saturday (2.5 - 3 hours). We also recommend setting aside 2-3 hours per week for homework and content creation to get the best results.
-                        </div>
+                    <div class="answer-content hidden">
+                        <strong>Absolutely not.</strong> Module 3 is dedicated to "Mobile Production Mastery." We teach you how to film, light, and edit cinematic content using just your smartphone. 80% of our successful graduates started with nothing but an iPhone.
                     </div>
                 </div>
 
                 <!-- Q3 -->
-                <div class="accordion-item rounded-xl border border-white/5 bg-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
-                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
-                        <h3 class="font-bold text-lg text-white">What if I miss a live session?</h3>
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
-                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
-                        </div>
+                <div class="faq-item p-6 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group" onclick="openModal(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-white">What happens if I miss a live session?</h3>
+                        <i data-lucide="external-link" class="w-5 h-5 text-zinc-500 group-hover:text-mayor-accent transition-colors"></i>
                     </div>
-                    <div class="accordion-content px-6 text-zinc-400">
-                        <div class="pb-6 border-t border-white/5 pt-4">
-                            No problem. We offer a hybrid model where all live sessions are recorded. You will have lifetime access to the recording portal to catch up at your own pace.
-                        </div>
+                    <div class="answer-content hidden">
+                        Life happens. That's why every live workshop is recorded in HD and uploaded to your student portal within 24 hours. You will have <strong>lifetime access</strong> to these recordings to revisit whenever you need.
                     </div>
                 </div>
 
                 <!-- Q4 -->
-                <div class="accordion-item rounded-xl border border-white/5 bg-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
-                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
-                        <h3 class="font-bold text-lg text-white">Is there a refund policy?</h3>
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
-                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
-                        </div>
+                <div class="faq-item p-6 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group" onclick="openModal(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-white">Will I get personal feedback on my content?</h3>
+                        <i data-lucide="external-link" class="w-5 h-5 text-zinc-500 group-hover:text-mayor-accent transition-colors"></i>
                     </div>
-                    <div class="accordion-content px-6 text-zinc-400">
-                        <div class="pb-6 border-t border-white/5 pt-4">
-                            Yes. We want you to be confident. Refunds are available up until the start of Session 2. This gives you a chance to experience the first week risk-free.
-                        </div>
+                    <div class="answer-content hidden">
+                        Yes. This is not a passive video course. We have dedicated "Hot Seat" sessions where Dr. Mohamed Nagia reviews selected student accounts and content pieces live, providing actionable critiques that benefit the entire cohort.
                     </div>
                 </div>
 
                 <!-- Q5 -->
-                <div class="accordion-item rounded-xl border border-white/5 bg-white/5 transition-all duration-300 cursor-pointer overflow-hidden">
-                    <div class="flex items-center justify-between p-6" onclick="toggleAccordion(this)">
-                        <h3 class="font-bold text-lg text-white">Will I receive a certificate?</h3>
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 accordion-icon">
-                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
-                        </div>
+                <div class="faq-item p-6 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group" onclick="openModal(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-white">Is the course in Arabic or English?</h3>
+                        <i data-lucide="external-link" class="w-5 h-5 text-zinc-500 group-hover:text-mayor-accent transition-colors"></i>
                     </div>
-                    <div class="accordion-content px-6 text-zinc-400">
-                        <div class="pb-6 border-t border-white/5 pt-4">
-                            Absolutely. Upon successful completion of the 6 weeks and your final capstone project, you will receive an official "Content Creator Masterclass" certificate.
-                        </div>
+                    <div class="answer-content hidden">
+                        The primary language of instruction is <strong>Arabic</strong> (accessible dialect for GCC/MENA) to ensure deep understanding, while technical terms and platform features are explained using their standard English terminology.
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="faq-item p-6 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group" onclick="openModal(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-white">Is there a refund policy?</h3>
+                        <i data-lucide="external-link" class="w-5 h-5 text-zinc-500 group-hover:text-mayor-accent transition-colors"></i>
+                    </div>
+                    <div class="answer-content hidden">
+                        We are confident in the value we deliver. You can attend the first week (Session 1), and if you feel it's not the right fit, simply email us before the start of Session 2 for a full refund. No hard feelings.
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="faq-item p-6 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group" onclick="openModal(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-white">When does the next cohort start?</h3>
+                        <i data-lucide="external-link" class="w-5 h-5 text-zinc-500 group-hover:text-mayor-accent transition-colors"></i>
+                    </div>
+                    <div class="answer-content hidden">
+                        We open enrollment for a limited time to ensure quality attention for each student. The current application window is open now, but seats are filling up. Once the countdown timer hits zero, enrollment closes until next quarter.
                     </div>
                 </div>
 
@@ -675,7 +757,6 @@
     <!-- FORM SECTION -->
     <section id="apply-form" class="py-24 px-6 relative">
         <div class="absolute inset-0 bg-gradient-to-t from-black to-mayor-navy"></div>
-        
         <div class="max-w-3xl mx-auto relative z-10">
             <div class="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-xl shadow-2xl reveal">
                 <div class="text-center mb-10">
@@ -685,28 +766,16 @@
                     <h2 class="text-3xl md:text-4xl font-bold font-display mb-2">Apply for Cohort 01</h2>
                     <p class="text-zinc-400">Join the elite group of creators scaling in the GCC.</p>
                 </div>
-
                 <form onsubmit="handleFormSubmit(event)" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-bold text-zinc-500 uppercase mb-2">Full Name</label>
-                            <input type="text" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent focus:outline-none transition-colors placeholder-zinc-700" placeholder="Your Name">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-zinc-500 uppercase mb-2">WhatsApp Number</label>
-                            <input type="tel" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent focus:outline-none transition-colors placeholder-zinc-700" placeholder="+971 50 ...">
-                        </div>
+                        <div><label class="block text-xs font-bold text-zinc-500 uppercase mb-2">Full Name</label><input type="text" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent outline-none transition-colors" placeholder="Your Name"></div>
+                        <div><label class="block text-xs font-bold text-zinc-500 uppercase mb-2">WhatsApp</label><input type="tel" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent outline-none transition-colors" placeholder="+971 50 ..."></div>
                     </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-zinc-500 uppercase mb-2">Email Address</label>
-                        <input type="email" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent focus:outline-none transition-colors placeholder-zinc-700" placeholder="you@example.com">
-                    </div>
-
+                    <div><label class="block text-xs font-bold text-zinc-500 uppercase mb-2">Email</label><input type="email" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent outline-none transition-colors" placeholder="you@example.com"></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-xs font-bold text-zinc-500 uppercase mb-2">Primary Goal</label>
-                            <select class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent focus:outline-none transition-colors">
+                            <select class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent outline-none transition-colors">
                                 <option>Monetization & Deals</option>
                                 <option>Audience Growth</option>
                                 <option>Better Content Quality</option>
@@ -714,31 +783,80 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-zinc-500 uppercase mb-2">Social Link</label>
-                            <input type="url" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent focus:outline-none transition-colors placeholder-zinc-700" placeholder="Instagram/TikTok URL">
+                            <input type="url" required class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-mayor-accent outline-none transition-colors" placeholder="Instagram/TikTok URL">
                         </div>
                     </div>
-
-                    <button type="submit" class="w-full py-4 bg-mayor-accent text-black font-bold text-lg rounded-xl hover:bg-[#d18e62] transition-all shadow-[0_0_30px_rgba(230,159,112,0.3)] hover:shadow-[0_0_50px_rgba(230,159,112,0.5)] transform hover:-translate-y-1">
-                        Submit Application
-                    </button>
-                    
-                    <p class="text-center text-xs text-zinc-600">
-                        By applying, you agree to our terms. We will contact you via WhatsApp.
-                    </p>
+                    <button type="submit" class="w-full py-4 bg-mayor-accent text-black font-bold text-lg rounded-xl hover:bg-[#d18e62] transition-all shadow-[0_0_30px_rgba(230,159,112,0.3)] hover:shadow-[0_0_50px_rgba(230,159,112,0.5)] transform hover:-translate-y-1">Submit Application</button>
                 </form>
             </div>
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer class="py-12 text-center text-zinc-600 text-sm border-t border-white/5 bg-black">
         <p>&copy; 2026 The Mayor Agency. All rights reserved.</p>
     </footer>
+
+    <!-- MODAL STRUCTURE -->
+    <div id="faq-modal" class="fixed inset-0 z-[100] hidden items-center justify-center px-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop" onclick="closeModal()"></div>
+        
+        <!-- Content -->
+        <div class="bg-[#0f0f0f] border border-white/10 rounded-2xl p-8 max-w-2xl w-full relative z-10 transform scale-95 opacity-0 transition-all duration-300 shadow-2xl" id="modal-content">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 id="modal-title" class="text-2xl font-bold font-display text-white mb-6 pr-8"></h3>
+            <div id="modal-body" class="text-zinc-400 leading-relaxed text-lg"></div>
+        </div>
+    </div>
 
     <!-- JAVASCRIPT -->
     <script>
         lucide.createIcons();
 
-        // 3D Tilt Logic
+        // 1. GLOBAL SCROLL PROGRESS BAR
+        window.addEventListener('scroll', () => {
+            const scrollPx = document.documentElement.scrollTop;
+            const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = `${scrollPx / winHeightPx * 100}%`;
+            document.getElementById('scroll-progress').style.width = scrolled;
+        });
+
+        // 2. ANIMATED NUMBER COUNTERS (KPIs)
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; 
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        };
+
+        const statsSection = document.getElementById('stats-section');
+        const statsObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting) {
+                animateCounters();
+                statsObserver.disconnect();
+            }
+        });
+        if(statsSection) statsObserver.observe(statsSection);
+
+
+        // 3. 3D TILT LOGIC
         const cards = document.querySelectorAll('.tilt-card, .tilt-card-trigger');
         cards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
@@ -747,9 +865,8 @@
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                // Max tilt 10 deg
-                const rotateX = ((y - centerY) / centerY) * -10; 
-                const rotateY = ((x - centerX) / centerX) * 10;
+                const rotateX = ((y - centerY) / centerY) * -5; 
+                const rotateY = ((x - centerX) / centerX) * 5;
                 
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
             });
@@ -758,7 +875,7 @@
             });
         });
 
-        // Scroll Reveal
+        // 4. SCROLL REVEAL
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -768,7 +885,7 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Timer
+        // 5. COUNTDOWN TIMER
         setInterval(() => {
             const now = new Date();
             const end = new Date();
@@ -778,8 +895,9 @@
             const h = Math.floor(diff / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             const s = Math.floor((diff % 60000) / 1000);
-            document.querySelector('.countdown-timer').innerText = 
-                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            document.querySelectorAll('.countdown-timer').forEach(el => {
+                el.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            });
         }, 1000);
 
         function scrollToForm() {
@@ -798,28 +916,48 @@
             }, 1500);
         }
 
-        // Accordion Logic
-        function toggleAccordion(header) {
-            const item = header.parentElement;
-            const content = item.querySelector('.accordion-content');
-            
-            // Close others
-            document.querySelectorAll('.accordion-item').forEach(otherItem => {
-                if (otherItem !== item && otherItem.classList.contains('active')) {
-                    otherItem.classList.remove('active');
-                    otherItem.querySelector('.accordion-content').style.maxHeight = null;
-                }
-            });
+        // 6. POPUP MODAL LOGIC
+        const modal = document.getElementById('faq-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
 
-            // Toggle current
-            if (item.classList.contains('active')) {
-                item.classList.remove('active');
-                content.style.maxHeight = null;
-            } else {
-                item.classList.add('active');
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
+        function openModal(element) {
+            const question = element.querySelector('h3').innerText;
+            const answerHTML = element.querySelector('.answer-content').innerHTML;
+
+            modalTitle.innerText = question;
+            modalBody.innerHTML = answerHTML;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger animation
+            setTimeout(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modalContent.classList.remove('opacity-0', 'scale-95');
+                modalContent.classList.add('opacity-100', 'scale-100');
+            }, 10);
         }
+
+        function closeModal() {
+            modalBackdrop.classList.add('opacity-0');
+            modalContent.classList.remove('opacity-100', 'scale-100');
+            modalContent.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // Wait for transition
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>

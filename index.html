@@ -24,7 +24,7 @@
                     colors: {
                         'mayor-navy': '#020617', /* Darker Navy */
                         'mayor-accent': '#E69F70', /* Copper Luxury */
-                        'glass-navy': 'rgba(2, 6, 23, 0.85)',
+                        'glass-navy': 'rgba(2, 6, 23, 0.95)',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -32,9 +32,7 @@
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
-                        'float-delayed': 'float 6s ease-in-out 3s infinite',
                         'breath-pop': 'breathPop 4s ease-in-out infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'marquee': 'marquee 25s linear infinite',
                         'shimmer': 'shimmer 2s linear infinite',
@@ -48,10 +46,6 @@
                         breathPop: {
                             '0%, 100%': { transform: 'scale(1)', textShadow: '0 0 20px rgba(230,159,112,0.1)' },
                             '50%': { transform: 'scale(1.03)', textShadow: '0 0 50px rgba(230,159,112,0.4)' },
-                        },
-                        glow: {
-                            '0%': { boxShadow: '0 0 5px rgba(230,159,112,0.2)' },
-                            '100%': { boxShadow: '0 0 20px rgba(230,159,112,0.6)' },
                         },
                         marquee: {
                             '0%': { transform: 'translateX(0%)' },
@@ -88,7 +82,7 @@
         
         /* Navbar Glass */
         .nav-glass {
-            background: rgba(2, 6, 23, 0.9);
+            background: rgba(2, 6, 23, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -110,29 +104,27 @@
         }
     </style>
 </head>
-<body class="bg-mayor-navy text-white overflow-x-hidden selection:bg-mayor-accent selection:text-black font-sans">
+<body class="bg-mayor-navy text-white overflow-x-hidden selection:bg-mayor-accent selection:text-black font-sans pb-20 md:pb-0">
 
     <!-- GLOBAL SCROLL PROGRESS BAR -->
     <div class="fixed top-0 left-0 h-1 bg-gradient-to-r from-mayor-accent via-white to-mayor-accent z-[100] w-0 transition-all duration-100 ease-out shadow-[0_0_10px_#E69F70]" id="scroll-progress"></div>
 
     <!-- NAVIGATION BAR -->
-    <nav class="fixed top-0 w-full z-50 nav-glass transition-all duration-300 pb-2 pt-2" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-3">
+    <nav class="fixed top-0 w-full z-50 nav-glass transition-all duration-300 pb-3 pt-3" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-4">
             
             <div class="flex items-center gap-4 w-full justify-center relative">
-                <!-- 1. Secure Seat Button -->
-                <button onclick="scrollToForm()" class="px-8 py-2 bg-mayor-accent text-black font-bold text-xs md:text-sm tracking-widest uppercase rounded-full shadow-[0_0_20px_rgba(230,159,112,0.4)] hover:shadow-[0_0_40px_rgba(230,159,112,0.6)] hover:scale-105 transition-all transform duration-300 flex items-center gap-2 group">
+                <!-- 1. Secure Seat Button (Desktop) -->
+                <button onclick="scrollToForm()" class="hidden md:flex px-8 py-2 bg-mayor-accent text-black font-bold text-sm tracking-widest uppercase rounded-full shadow-[0_0_20px_rgba(230,159,112,0.4)] hover:shadow-[0_0_40px_rgba(230,159,112,0.6)] hover:scale-105 transition-all transform duration-300 items-center gap-2 group">
                     <i data-lucide="lock" class="w-4 h-4 group-hover:animate-pulse"></i> Secure Your Seat
                 </button>
 
-                <!-- 2. The Offer Box -->
-                <div onclick="scrollToForm()" class="group cursor-pointer relative flex items-center gap-4 bg-black/40 border border-white/10 px-4 py-2 rounded-xl backdrop-blur-md transition-all hover:bg-white/5 hover:border-mayor-accent/30 hidden md:flex">
-                    
-                    <!-- Red Alarm "Book Now" Badge -->
+                <!-- 2. The Offer Box (Desktop) -->
+                <div onclick="scrollToForm()" class="hidden md:flex group cursor-pointer relative items-center gap-4 bg-black/40 border border-white/10 px-4 py-2 rounded-xl backdrop-blur-md transition-all hover:bg-white/5 hover:border-mayor-accent/30">
+                    <!-- Red Alarm Badge -->
                     <div class="absolute -top-3 -right-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.6)] flex items-center gap-1 border border-white/20 z-10 group-hover:scale-110 transition-transform">
                         <i data-lucide="alarm-clock" class="w-3 h-3"></i> BOOK NOW
                     </div>
-
                     <div class="flex flex-col items-center leading-none border-r border-white/10 pr-4">
                         <span class="text-[10px] text-zinc-400 uppercase tracking-wider group-hover:text-white transition-colors">Offer Ends In</span>
                         <div class="font-mono text-mayor-accent font-bold text-lg countdown-timer">23:59:59</div>
@@ -142,21 +134,39 @@
                         <span class="text-xl font-bold text-white group-hover:text-mayor-accent transition-colors">AED 3,000</span>
                     </div>
                 </div>
+
+                <!-- MOBILE LOGO / TITLE (Visible only on Mobile) -->
+                <div class="md:hidden text-lg font-bold font-display text-white tracking-wider">
+                    MASTER<span class="text-mayor-accent">CLASS</span>
+                </div>
             </div>
 
-            <!-- 3. CAPACITY PROGRESS BAR (Live FOMO) -->
-            <div class="w-full max-w-md flex flex-col gap-1">
+            <!-- 3. CAPACITY PROGRESS BAR (Improved Visibility) -->
+            <div class="w-full max-w-md flex flex-col gap-1.5">
                 <div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-mayor-accent px-1">
                     <span class="animate-pulse">Cohort Filling Fast</span>
-                    <span>87% Full</span>
+                    <span class="text-white">87% Full</span>
                 </div>
-                <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-red-600 to-mayor-accent w-[87%] rounded-full shadow-[0_0_10px_rgba(230,159,112,0.5)] animate-pulse-slow"></div>
+                <!-- Track background lighter for visibility -->
+                <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden border border-white/5">
+                    <!-- Filled bar with direct style width -->
+                    <div class="h-full bg-gradient-to-r from-red-600 to-mayor-accent rounded-full shadow-[0_0_10px_rgba(230,159,112,0.8)] animate-pulse-slow" style="width: 87%"></div>
                 </div>
             </div>
 
         </div>
     </nav>
+
+    <!-- MOBILE STICKY BOTTOM BAR (New Feature for Mobile) -->
+    <div class="md:hidden fixed bottom-0 left-0 w-full z-[60] bg-[#0f0f0f] border-t border-mayor-accent/30 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] flex items-center justify-between">
+        <div class="flex flex-col">
+            <span class="text-[10px] text-zinc-400 uppercase tracking-widest line-through decoration-red-500">AED 5,000</span>
+            <span class="text-xl font-bold text-mayor-accent font-display">AED 3,000</span>
+        </div>
+        <button onclick="scrollToForm()" class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold text-sm tracking-widest shadow-lg shadow-red-900/40 hover:bg-red-700 transition active:scale-95 flex items-center gap-2">
+            <i data-lucide="lock" class="w-4 h-4"></i> BOOK NOW
+        </button>
+    </div>
 
     <!-- HERO SECTION -->
     <header class="relative pt-48 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center text-center overflow-hidden">
@@ -165,8 +175,7 @@
         
         <!-- Background Lighting -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none animate-float"></div>
-        <div class="absolute top-40 right-20 w-64 h-64 bg-mayor-accent/5 rounded-full blur-[100px] pointer-events-none animate-float-delayed"></div>
-
+        
         <div class="space-y-8 max-w-5xl z-10 reveal active">
             
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-blue-200 uppercase tracking-widest hover:border-mayor-accent/50 transition-colors cursor-default">
@@ -176,9 +185,9 @@
             
             <h1 class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[1] font-display">
                 Content Creator <br />
-                <span class="text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-100 to-mayor-accent animate-breath-pop inline-block cursor-default relative">
+                <!-- FIXED: Removed text-transparent and bg-clip-text to fix visibility issues -->
+                <span class="text-mayor-accent inline-block cursor-default relative drop-shadow-[0_0_25px_rgba(230,159,112,0.3)]">
                     Masterclass
-                    <span class="absolute -inset-1 bg-mayor-accent/20 blur-xl opacity-50 animate-pulse"></span>
                 </span>
             </h1>
             
@@ -861,7 +870,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="py-12 text-center text-zinc-600 text-sm border-t border-white/5 bg-black">
+    <footer class="py-12 text-center text-zinc-600 text-sm border-t border-white/5 bg-black pb-32 md:pb-12"> <!-- Added padding bottom for mobile sticky bar -->
         <p>&copy; 2026 The Mayor Agency. All rights reserved.</p>
     </footer>
 
